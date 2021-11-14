@@ -6,7 +6,7 @@ import router from './router'
 import store from './store'
 
 const gAuthOptions = {
-  clientId: '897055106103-se44us8rvn4v7ra420pkh6kvaght3nu3.apps.googleusercontent.com',
+  clientId: '897055106103-174buvsnf0qe9bcjmg01chf7v8egcvaf.apps.googleusercontent.com',
   scope: 'email',
   prompt: 'consent',
   fetch_basic_profile: false

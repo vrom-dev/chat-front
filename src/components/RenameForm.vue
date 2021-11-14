@@ -44,7 +44,6 @@ export default {
         if (response.error) {
           throw new Error(response.error)
         }
-        console.log(response)
         store.commit('setUser', response)
         window.localStorage.setItem('chat:sessiontoken', JSON.stringify(response))
         router.push('/explore')

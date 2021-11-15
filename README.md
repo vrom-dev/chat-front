@@ -15,6 +15,11 @@ npm install
 ```
 All npm packages will be installed. 
 
+Add the API url in the .env file as follows:
+```bash
+VITE_API_URL=YOUR_API_URL
+```
+
 ## How to start the app
 Development mode:
 ```bash

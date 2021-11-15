@@ -45,7 +45,7 @@ export default {
       data.append('user', store.state.user.username)
       const { token } = store.state.user
       try {
-        const response = await window.fetch('https://twitchchat.herokuapp.com/room', {
+        const response = await window.fetch(`${import.meta.env.VITE_API_URL}/room`, {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${token}`

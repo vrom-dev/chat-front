@@ -80,7 +80,7 @@ export default {
         .name
     })()
 
-    const socket = io('https://twitchchat.herokuapp.com/')
+    const socket = io(`${import.meta.env.VITE_API_URL}`)
     const messages = ref([])
     const message = ref('')
 
@@ -104,7 +104,7 @@ export default {
       messages.value.push(messageObj)
       message.value = ''
       const newMessage = await window.fetch(
-        `https://twitchchat.herokuapp.com/room/${route.params.id}`,
+        `${import.meta.env.VITE_API_URL}/room/${route.params.id}`,
         {
           method: 'POST',
           headers: {

@@ -20,7 +20,7 @@ export default {
     Channel
   },
   setup (props, context) {
-    const socket = io('https://twitchchat.herokuapp.com/')
+    const socket = io(`${import.meta.env.VITE_API_URL}`)
     const store = useStore()
 
     socket.on('active users', (activeUsers) => {

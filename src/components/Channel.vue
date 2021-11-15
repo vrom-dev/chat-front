@@ -6,7 +6,7 @@
     >
       <div class="img-container">
         <div class="img-container-bg">
-          <img :src="`https://twitchchat.herokuapp.com${channel.image}`" />
+          <img :src="`${VITE_API_URL}${channel.image}`" />
         </div>
       </div>
       <h4 class="channel-name">
@@ -24,11 +24,13 @@ export default {
     channel: Object
   },
   setup (props, _) {
+    const {VITE_API_URL} = `${import.meta.env}`
     return {
       viewers: computed(() => props.channel.activeUsers.length === 1
         ? '1 espectador'
         : `${props.channel.activeUsers.length} espectadores`
-      )
+      ),
+      VITE_API_URL
     }
   }
 }

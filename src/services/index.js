@@ -1,4 +1,4 @@
-const baseUrl = 'https://twitchchat.herokuapp.com'
+const baseUrl = import.meta.env.VITE_API_URL
 
 let token = null
 

@@ -18,6 +18,9 @@
       />
       <CustomButton buttonText="Añadir canal" />
     </div>
+    <div class='error-message'>
+      {{ errorMessage }}
+    </div>
   </form>
 </template>
 
@@ -39,8 +42,13 @@ export default {
     const store = useStore()
     const channelName = ref('')
     const channelImage = ref('')
+    const errorMessage = ref('')
 
     const handleSubmit = async (e) => {
+      if (channelName.value.trim() === '' || channelImage.value.trim() === '') {
+        errorMessage.value = 'Debes introducir todos los campos'
+        return
+      }
       const data = new window.FormData(e.target)
       data.append('user', store.state.user.username)
       const { token } = store.state.user
@@ -65,15 +73,26 @@ export default {
         })
         channelName.value = ''
         channelImage.value = ''
+        errorMessage.value = ''
       } catch (error) {
-        console.log(error)
+        if (error.message === 'Required request field not provided') {
+          errorMessage.value = 'Debes introducir todos los campos'
+          return
+        }
+        if (error.message  === 'File type not supported') {
+          errorMessage.value = 'El archivo debe ser png, jpeg o gif'
+          return
+        }
+        channelName.value = ''
+        channelImage.value = ''
       }
     }
 
     return {
       channelName,
       channelImage,
-      handleSubmit
+      handleSubmit,
+      errorMessage
     }
   }
 }
@@ -85,5 +104,12 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.error-message {
+  color: rgb(255, 0, 0);
+  margin: 2rem .5rem;
+  height: 2rem;
+  font-size: 1.1rem;
 }
 </style>

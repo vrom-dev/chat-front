@@ -16,6 +16,9 @@
       placeholder="Password"
       v-model='password'
     />
+    <div class='error-message'>
+      {{ errorMessage }}
+    </div>
     <div class='button-container'>
       <CustomButton buttonText="Iniciar sesión"/>
     </div>
@@ -38,10 +41,16 @@ export default {
 
     const username = ref('')
     const password = ref('')
+    const errorMessage = ref('')
 
     const handleSubmit = async (e) => {
       const usernameValue = username.value
       const passwordValue = password.value
+
+      if (usernameValue === '' || passwordValue === '') {
+        errorMessage.value = 'Debes introducir todos los campos'
+        return
+      }
 
       const credentials = {
         username: usernameValue,
@@ -56,7 +65,15 @@ export default {
         window.localStorage.setItem('chat:sessiontoken', JSON.stringify(response))
         router.push('/explore')
       } catch (error) {
-        console.log(error)
+        if (error.message === 'Required request field not provided') {
+          errorMessage.value = 'Debes introducir todos los campos'
+          return
+        }
+        if (error.message === 'Invalid username or password') {
+          errorMessage.value = 'El email o contraseña son incorrectos'
+          return
+        }
+        errorMessage.value = 'Ha ocurrido un error'
         username.value = ''
         password.value = ''
       }
@@ -65,7 +82,8 @@ export default {
     return {
       handleSubmit,
       username,
-      password
+      password,
+      errorMessage
     }
   }
 }
@@ -84,6 +102,12 @@ export default {
 }
 .form {
   width: 100%;
-  padding: 0 5rem 0;
+  padding: 0 5rem;
+}
+.error-message {
+  color: rgb(255, 0, 0);
+  margin-bottom: 2rem;
+  height: 2rem;
+  font-size: 1.1rem;
 }
 </style>

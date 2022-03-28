@@ -22,6 +22,9 @@
       placeholder="Password"
       v-model='password'
     />
+    <div class='error-message'>
+      {{ errorMessage }}
+    </div>
     <div class='button-container'>
       <CustomButton buttonText="Registrarse"/>
     </div>
@@ -48,6 +51,7 @@ export default {
     const username = ref('')
     const email = ref('')
     const password = ref('')
+    const errorMessage = ref('')
 
     const handleSubmit = async (e) => {
       const usernameValue = username.value.trim()
@@ -58,6 +62,12 @@ export default {
         email: emailValue,
         password: passwordValue
       }
+
+      if (usernameValue === '' || emailValue === '' || passwordValue === '') {
+        errorMessage.value = 'Debes introducir todos los campos'
+        return
+      }
+
       try {
         const response = await createUser(user)
         if (response.error) {
@@ -67,7 +77,15 @@ export default {
         window.localStorage.setItem('chat:sessiontoken', JSON.stringify(response))
         router.push('/explore')
       } catch (error) {
-        console.log(error)
+        if (error.message === 'Required request field not provided') {
+          errorMessage.value = 'Debes introducir todos los campos'
+          return
+        }
+        if (error.message.startsWith('User validation failed')) {
+          errorMessage.value = 'El nombre de usuario debe tener al menos 4 carácteres'
+          return
+        }
+        errorMessage.value = 'Ha ocurrido un error'
         username.value = ''
         email.value = ''
         password.value = ''
@@ -78,7 +96,8 @@ export default {
       handleSubmit,
       username,
       email,
-      password
+      password,
+      errorMessage
     }
   }
 }
@@ -98,5 +117,11 @@ export default {
 .form {
   width: 100%;
   padding: 0 5rem 0;
+}
+.error-message {
+  color: rgb(255, 0, 0);
+  margin-bottom: 2rem;
+  height: 2rem;
+  font-size: 1.1rem;
 }
 </style>
